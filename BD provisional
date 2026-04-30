@@ -1,0 +1,27 @@
+CREATE TABLE Producto (
+    id_producto SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    peso_unitario_gramos NUMERIC(10, 2) NOT NULL,
+    margen_error_gramos NUMERIC(10, 2) DEFAULT 0
+);
+
+CREATE TABLE Repisa (
+    id_repisa VARCHAR(50) PRIMARY KEY,
+    ubicacion VARCHAR(150),
+    id_producto INT,
+    capacidad_maxima_unidades INT DEFAULT 10,
+    porcentaje_alerta INT DEFAULT 30,
+    CONSTRAINT fk_producto
+        FOREIGN KEY(id_producto) 
+        REFERENCES Producto(id_producto)
+);
+
+CREATE TABLE Registro_Pesaje (
+    id_registro SERIAL PRIMARY KEY,
+    id_repisa VARCHAR(50),
+    peso_bruto NUMERIC(10, 2) NOT NULL,
+    fecha_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_repisa
+        FOREIGN KEY(id_repisa) 
+        REFERENCES Repisa(id_repisa)
+);
