@@ -1,2 +1,8 @@
 # Proyecto-tic-1
-OPtimizacion de stock, mediante estanterias inteligentes
+Gestion de inventario inteligente
+
+Participantes:Guliano Bardi, Catalina Perez, Eduardo Alarcon, Francisco Olmos
+
+
+
+
