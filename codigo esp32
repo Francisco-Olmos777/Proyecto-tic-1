@@ -1,0 +1,39 @@
+#include "HX711_ADC.h"
+const int HX711_dout = 5; 
+const int HX711_sck = 18; 
+HX711_ADC LoadCell(HX711_dout, HX711_sck);
+const int PESO_BOTELLA = 300; 
+const int UMBRAL_REPOSICION = 1500; 
+const int MARGEN_ERROR = 45;        
+void setup(){
+  Serial.begin(115200); 
+  LoadCell.begin();
+  unsigned long stabilizingTime = 2000; 
+  boolean _tare = true;
+  LoadCell.start(stabilizingTime, _tare);
+  LoadCell.setCalFactor(0.420); 
+  Serial.println("Estantería Inteligente");
+}
+void loop(){
+  static boolean newDataReady = 0;
+  if (LoadCell.update()) newDataReady = true;
+  if (newDataReady){
+    float peso_actual = LoadCell.getData();
+    if (peso_actual < 0) peso_actual = 0; 
+    int botellas_estimadas = round(peso_actual / PESO_BOTELLA);
+    Serial.print("Inventario: ");
+    Serial.print(peso_actual, 0);
+    Serial.print(" ml (Aprox. ");
+    Serial.print(botellas_estimadas);
+    Serial.println(" botellas)");
+    if (peso_actual <= UMBRAL_REPOSICION && peso_actual > 50){ 
+      Serial.println("[ALERTA STOCK]: Se han retirado 4 o más botellas. Quedan " + String(botellas_estimadas) + " en estante.");
+    }
+    int residuo = (int)peso_actual % PESO_BOTELLA;
+    if (peso_actual > 50 && (residuo > MARGEN_ERROR && residuo < (PESO_BOTELLA - MARGEN_ERROR))) {
+      Serial.println("[ALERTA ANOMALÍA]: ¡Peso descuadrado!");
+    }
+    Serial.println("-------------------------------------------------");
+    newDataReady = false;
+  }
+}
