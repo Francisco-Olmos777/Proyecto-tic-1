@@ -47,7 +47,7 @@ void loop(){
     
     // Si el residuo está lejos de ser 0 o 300 (considerando el margen de error), hay anomalía
     if (peso_actual > 50 && (residuo > MARGEN_ERROR && residuo < (PESO_BOTELLA - MARGEN_ERROR))) {
-      Serial.println("[ALERTA ANOMALÍA]: ¡Peso descuadrado! Contenido no corresponde a botellas cerradas de 300ml.");
+      Serial.println("[ALERTA ANOMALÍA]: ¡Peso descuadrado! Contenido no corresponde a botellas cerradas de 200ml.");
     }
 
     Serial.println("-------------------------------------------------");
