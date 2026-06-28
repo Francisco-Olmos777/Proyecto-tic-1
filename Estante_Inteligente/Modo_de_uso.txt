@@ -1,0 +1,28 @@
+Fase 1 - Obtención del Factor de calibracion: 
+Para esto solo necesitas un objeto con un peso exacto conocido (por ejemplo, un paquete de harina sellado de 1000 gramos, para nuestro caso, una cajita de leche batida colun).
+- Enciende el ESP32 con el estante completamente vacío.
+- Conéctate a la red WiFi del dispositivo (SSID:"Estante_Inteligente_AP",Password:"Estante_Inteligente_AP") desde tu celular y entra a la IP 192.168.4.1 desde tu navegador web con la URL ("192.168.4.1").
+	(Nota: Si tu teléfono te advierte que la red no tiene internet, selecciona "Mantener conexión". Desactiva tus datos móviles si tienes problemas para conectar).
+- En la parte superior del panel verás un recuadro que dice "Lectura Actual del Sensor".
+- Coloca tu objeto de peso conocido (ej. 1000g) sobre el estante. La pantalla de tu celular te entregará una lectura errónea (por ejemplo, dirá que pesa 120.00g).
+- Aplica la siguiente regla de tres simple para calcular tu factor real (recomendable en la calculadora del celular):
+		{Factor Nuevo} = ({Peso Falso Registrado} * {Factor Actual}) / {Peso Real del Objeto}
+	Siguiendo el ejemplo: {Factor Nuevo} = {120.0 * 420.12}/{1000} = 50.41
+
+Fase 2: Almacenamiento Permanente en la Memoria
+Una vez calculado tu Factor Nuevo (ej: 50.41), realizarás la configuración definitiva en la misma pantalla:
+
+ - Formulario de Red: En la sección de WiFi, escribe el nombre y la contraseña de la red de internet de tu hogar.
+ - Credenciales de Nube: Pega el Device Token suministrado para tu estante. (Token temporal dispositivo: ijj1as9dj6gwlal13s4y)
+ - Datos del Producto: Escribe el nombre del producto, marca, el Stock Máximo de capacidad del estante y el Stock Mínimo para las alertas, asi como el peso unitario.
+ - Ingreso del Factor: En la casilla "Factor de Calibración de la Celda", borra el número por defecto (420.12) y escribe tu valor calculado (ej: 50.41).
+ - Guardar: Presiona el botón "Guardar e Iniciar Estante". El dispositivo guardará todo de forma permanente y se reiniciará solo.
+
+
+Fase 3:Conexion Definitiva
+- El dispositivo se conectará a la red y se enlazará con la nube; esperar 30 segundos a que el monitor serie o el dashboard reflejen la conexión.
+- Entrar en ThingsBoard, iniciar sesión con el usuario y contraseña suministrados por el administrador. (no implementado)
+- Rellenar el estante correspondiente al dispositivo
+- Disfrutar del monitoreo activo y preciso del dispositivo IoT.
+
+
