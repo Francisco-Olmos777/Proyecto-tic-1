@@ -1,0 +1,7 @@
+Añadido:
+	- Procesa el peso por batch (agrupa) en vez de por cada cambio
+	- Pulso HeartBeat para saber condicion del dispositivo a pesar de no cambios de peso
+	- Acces Point del dispositivo cuando no tiene internet
+	- Si tiene internet, se conecta a ThingsBoard
+	- Si pierde conexion no se congela, reintenta y si no consigue vuele a abrir el AP
+	- Parametros pasados a traves del formulario.
