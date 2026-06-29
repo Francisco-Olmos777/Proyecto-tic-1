@@ -264,15 +264,26 @@ void loop() {
     ocupacionEstante = ((float)stockCalculado / (float)stockMax) * 100.0;
   }
 
-  // Transmisión con formato estricto snake_case
-  tb.sendTelemetryData("nombre", productoNombre.c_str());
-  tb.sendTelemetryData("marca", productoMarca.c_str());
-  tb.sendTelemetryData("stock_actual", stockCalculado);
-  tb.sendTelemetryData("ocupacion_estante", ocupacionEstante);
-  tb.sendTelemetryData("peso_raw", pesoRaw);
-  tb.sendTelemetryData("stock_max", stockMax);
-  tb.sendTelemetryData("stock_min", stockMin);
-  tb.sendTelemetryData("peso_unitario", pesoUnitarioReal);
+unsigned long tiempoSegundos = millis() / 1000;
+long calidadWifi = WiFi.RSSI();
+
+// 1. Creamos un arreglo de telemetrías compartidas
+Telemetry t_datos[] = {
+  { "nombre", productoNombre.c_str() },
+  { "marca", productoMarca.c_str() },
+  { "stock_actual", stockCalculado },
+  { "ocupacion_estante", ocupacionEstante },
+  { "peso_raw", pesoRaw },
+  { "stock_max", stockMax },
+  { "stock_min", stockMin },
+  { "peso_unitario", pesoUnitarioReal },
+  { "ESP32uptime", tiempoSegundos },
+  { "ESP32_rssi", calidadWifi }
+};
+
+// 2. Calculamos el tamaño dinámico del arreglo y lo mandamos en un SOLO golpe de red
+size_t num_datos = sizeof(t_datos) / sizeof(t_datos[0]);
+tb.sendTelemetry(t_datos, num_datos);
 
   tb.loop();
   delay(5000); 

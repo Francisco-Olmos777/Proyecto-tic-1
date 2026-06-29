@@ -4,4 +4,5 @@ Añadido:
 	- Acces Point del dispositivo cuando no tiene internet
 	- Si tiene internet, se conecta a ThingsBoard
 	- Si pierde conexion no se congela, reintenta y si no consigue vuele a abrir el AP
-	- Parametros pasados a traves del formulario.
+	- Parametros pasados a traves del formulario.Añadida caracteristica: los datos se enviaran en un paquete en vez de enviarse uno a uno
+Nuevos campos como Tiempo de ejecucion, peso unitario, calidad de conexion a internet añadidos al dispositivo y a ThingsBoard
