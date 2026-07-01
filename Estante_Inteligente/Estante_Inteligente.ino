@@ -267,27 +267,28 @@ void loop() {
 unsigned long tiempoSegundos = millis() / 1000;
 long calidadWifi = WiFi.RSSI();
 
-// ENVÍO MEDIANTE JSON PLANO UNIFICADO
-  StaticJsonDocument<256> jsonBuffer;
-  JsonObject objetoJson = jsonBuffer.to<JsonObject>();
-// Agrupamos todas las llaves en un solo objeto plano
-  objetoJson["nombre"] = productoNombre;
-  objetoJson["marca"] = productoMarca;
-  objetoJson["stock_actual"] = stockCalculado;
-  objetoJson["ocupacion_estante"] = ocupacionEstante;
-  objetoJson["peso_raw"] = pesoRaw;
-  objetoJson["stock_max"] = stockMax;
-  objetoJson["stock_min"] = stockMin;
-  objetoJson["peso_unitario"] = pesoUnitarioReal;
-  objetoJson["ESP32uptime"] = tiempoSegundos;
-  objetoJson["ESP32_rssi"] = calidadWifi;
+// Nota dev: pinche gemini no se entera de nada
 
-  // Convertimos el JSON a un string plano
-  String jsonString;
-  serializeJson(objetoJson, jsonString);
+  //Usamos libreria ArduinoJson para crear el objeto
+  JsonDocument doc; 
 
-  // Enviamos el string JSON completo de un solo golpe usando el método universal de ThingsBoard
-  tb.sendTelemetryJson(jsonString.c_str());
+  // Llenamos el documento con todos nuestros datos
+  doc["nombre"] = productoNombre;
+  doc["marca"] = productoMarca;
+  doc["stock_actual"] = stockCalculado;
+  doc["ocupacion_estante"] = ocupacionEstante;
+  doc["peso_raw"] = pesoRaw;
+  doc["stock_max"] = stockMax;
+  doc["stock_min"] = stockMin;
+  doc["peso_unitario"] = pesoUnitarioReal;
+  doc["ESP32uptime"] = tiempoSegundos;
+  doc["ESP32_rssi"] = calidadWifi;
+
+  //Calculamos el tamaño exacto del JSON usando el método nativo "Measure_Json" de su propia lista
+  size_t jsonSize = measureJson(doc);
+
+  //Pasamos el documento y el tamaño medido tal como exige la firma de los devs de ThingsBoard
+  tb.sendTelemetryJson(doc, jsonSize);
 
   tb.loop();
   delay(5000); 
