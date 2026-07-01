@@ -267,23 +267,27 @@ void loop() {
 unsigned long tiempoSegundos = millis() / 1000;
 long calidadWifi = WiFi.RSSI();
 
-// 1. Creamos un arreglo de telemetrías compartidas
-Telemetry t_datos[] = {
-  { "nombre", productoNombre.c_str() },
-  { "marca", productoMarca.c_str() },
-  { "stock_actual", stockCalculado },
-  { "ocupacion_estante", ocupacionEstante },
-  { "peso_raw", pesoRaw },
-  { "stock_max", stockMax },
-  { "stock_min", stockMin },
-  { "peso_unitario", pesoUnitarioReal },
-  { "ESP32uptime", tiempoSegundos },
-  { "ESP32_rssi", calidadWifi }
-};
+// ENVÍO MEDIANTE JSON PLANO UNIFICADO
+  StaticJsonDocument<256> jsonBuffer;
+  JsonObject objetoJson = jsonBuffer.to<JsonObject>();
+// Agrupamos todas las llaves en un solo objeto plano
+  objetoJson["nombre"] = productoNombre;
+  objetoJson["marca"] = productoMarca;
+  objetoJson["stock_actual"] = stockCalculado;
+  objetoJson["ocupacion_estante"] = ocupacionEstante;
+  objetoJson["peso_raw"] = pesoRaw;
+  objetoJson["stock_max"] = stockMax;
+  objetoJson["stock_min"] = stockMin;
+  objetoJson["peso_unitario"] = pesoUnitarioReal;
+  objetoJson["ESP32uptime"] = tiempoSegundos;
+  objetoJson["ESP32_rssi"] = calidadWifi;
 
-// 2. Calculamos el tamaño dinámico del arreglo y lo mandamos en un SOLO golpe de red
-size_t num_datos = sizeof(t_datos) / sizeof(t_datos[0]);
-tb.sendTelemetry(t_datos, num_datos);
+  // Convertimos el JSON a un string plano
+  String jsonString;
+  serializeJson(objetoJson, jsonString);
+
+  // Enviamos el string JSON completo de un solo golpe usando el método universal de ThingsBoard
+  tb.sendTelemetryJson(jsonString.c_str());
 
   tb.loop();
   delay(5000); 
