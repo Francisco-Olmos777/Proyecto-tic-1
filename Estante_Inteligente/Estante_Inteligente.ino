@@ -214,6 +214,8 @@ void setup() {
   balanza.set_scale(factorCalibracion);
   balanza.tare(); 
 
+  tb.setBufferSize(512);
+
   // --- INTEGRACIÓN OPCIÓN A: TIMEOUT DE RED ---
   if (ssidReal.length() > 0 && tokenReal.length() > 0) {
     Serial.println("\n[Modo CLIENTE] Intentando conectar a la red guardada...");
